@@ -52,7 +52,7 @@ client.connect(err => {
 
     })
 
-    app.get('/serviceId/:id',(req,res) => {
+    app.get('/service/:id',(req,res) => {
       const id = ObjectID(req.params.id);
       servicesCollection.find({_id:id})
       .toArray((err,items) => {
