@@ -30,6 +30,8 @@ client.connect(err => {
   // console.log(err)
   const servicesCollection = client.db("repair").collection("devices");
 
+  const reviewCollection = client.db("repair").collection("review");
+
 
   app.get('/service', (req, res) => {
     servicesCollection.find()
@@ -37,12 +39,19 @@ client.connect(err => {
         res.send(documents);
       })
     })
+    app.get('/review', (req, res) => {
+      reviewCollection.find()
+        .toArray((err, documents) => {
+          res.send(documents);
+        })
+      })
+  
 
 
     app.post('/addService', (req, res) => {
 
       const newService = req.body;
-      console.log('adding new product:', newService);
+      // console.log('adding new product:', newService);
       servicesCollection.insertOne(newService)
         .then(result => {
 
@@ -51,6 +60,19 @@ client.connect(err => {
         })
 
     })
+    app.post('/addReview', (req, res) => {
+
+      const newReview = req.body;
+      // console.log('adding new product:', newService);
+      reviewCollection.insertOne(newReview)
+        .then(result => {
+
+          console.log('Insert count', result.insertedCount)
+          res.send(result.insertedCount > 0)
+        })
+
+    })
+
 
     app.get('/service/:id',(req,res) => {
       const id = ObjectID(req.params.id);
