@@ -32,6 +32,8 @@ client.connect(err => {
 
   const reviewCollection = client.db("repair").collection("review");
 
+  const adminCollection = client.db("repair").collection("admin");
+
 
   app.get('/service', (req, res) => {
     servicesCollection.find()
@@ -45,6 +47,14 @@ client.connect(err => {
           res.send(documents);
         })
       })
+
+      app.get('/admin', (req, res) => {
+        adminCollection.find()
+          .toArray((err, documents) => {
+            res.send(documents);
+          })
+        })
+    
   
 
 
@@ -65,6 +75,17 @@ client.connect(err => {
       const newReview = req.body;
       // console.log('adding new product:', newService);
       reviewCollection.insertOne(newReview)
+        .then(result => {
+
+          console.log('Insert count', result.insertedCount)
+          res.send(result.insertedCount > 0)
+        })
+
+    })
+    app.post('/addAdmin', (req, res) => {
+
+      const newAdmin = req.body;
+      adminCollection.insertOne(newAdmin)
         .then(result => {
 
           console.log('Insert count', result.insertedCount)
